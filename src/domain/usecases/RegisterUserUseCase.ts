@@ -12,14 +12,14 @@ export interface IRegisterUserInput {
 
 @injectable()
 export class RegisterUserUseCase {
-  constructor(private readonly userRepo: IUserRepository) {}
+  constructor(private readonly userRepo: IUserRepository) { }
 
   async execute(input: IRegisterUserInput): Promise<User> {
     const existing = await this.userRepo.findByEmail(input.email);
     if (existing) {
       throw new Error("User already exists");
     }
-    const passwordHash = await bcrypt.hash(input.password, 10);
+    const passwordHash = await bcrypt.hash(input.password, 12);
     const user = await this.userRepo.create({
       email: input.email,
       passwordHash,

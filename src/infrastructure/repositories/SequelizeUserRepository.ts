@@ -13,7 +13,7 @@ interface UserAttributes {
   role: string;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, "id" | "role"> {}
+interface UserCreationAttributes extends Optional<UserAttributes, "id" | "role"> { }
 
 class UserModel extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;

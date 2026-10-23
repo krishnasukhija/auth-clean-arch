@@ -1,4 +1,4 @@
-import { Entity, PrimaryKey, Property } from 'typeorm';
+// import { Entity, PrimaryKey, Property } from 'typeorm';
 
 // In clean architecture, the domain entity is plain and framework-agnostic.
 // Here we define a User entity with minimal fields.

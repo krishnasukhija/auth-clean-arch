@@ -10,7 +10,7 @@ export class AuthController {
   constructor(
     @inject(TYPES.RegisterUserUseCase) private registerUserUseCase: RegisterUserUseCase,
     @inject(TYPES.AuthenticateUserUseCase) private authenticateUserUseCase: AuthenticateUserUseCase
-  ) {}
+  ) { }
 
   async register(req: Request, res: Response) {
     try {
