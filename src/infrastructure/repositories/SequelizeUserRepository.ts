@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
 
 // Define Sequelize model attributes
 interface UserAttributes {
-  id: number;
+  id: string;
   email: string;
   passwordHash: string;
   role: string;
@@ -16,7 +16,7 @@ interface UserAttributes {
 interface UserCreationAttributes extends Optional<UserAttributes, "id" | "role"> { }
 
 class UserModel extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: number;
+  public id!: string;
   public email!: string;
   public passwordHash!: string;
   public role!: string;
@@ -28,7 +28,7 @@ class UserModel extends Model<UserAttributes, UserCreationAttributes> implements
 
 UserModel.init(
   {
-    id: { type: DataTypes.INTEGER.UNSIGNED, autoIncrement: true, primaryKey: true },
+    id: { type: DataTypes.UUID, primaryKey: true },
     email: { type: DataTypes.STRING, allowNull: false, unique: true },
     passwordHash: { type: DataTypes.STRING, allowNull: false },
     role: { type: DataTypes.STRING, allowNull: false, defaultValue: "user" },
@@ -61,4 +61,11 @@ export class SequelizeUserRepository implements IUserRepository {
     if (!found) return null;
     return new User(found.id, found.email, found.passwordHash, found.role);
   }
+
+  // async addRole(userId: number, roleId: number): Promise<void> {
+
+  // }
+
+  // async getRoles(userId: number): Promise<number[]> {
+  // }
 }

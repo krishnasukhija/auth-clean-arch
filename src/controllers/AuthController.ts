@@ -14,8 +14,9 @@ export class AuthController {
 
   async register(req: Request, res: Response) {
     try {
-      const { email, password, role } = req.body;
-      const user = await this.registerUserUseCase.execute({ email, password, role });
+      const { email, password } = req.body;
+      const role = null;
+      const user = await this.registerUserUseCase.execute({ email, password });
       res.status(201).json({ id: user.id, email: user.email, role: user.role });
     } catch (err: any) {
       res.status(400).json({ error: err.message });

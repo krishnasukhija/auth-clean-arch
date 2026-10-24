@@ -1,18 +1,21 @@
 // src/domain/usecases/RegisterUserUseCase.ts
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
 import { IUserRepository } from "../repositories/IUserRepository";
 import { User } from "../../entities/User";
 import bcrypt from "bcrypt";
+import { TYPES } from "../../infrastructure/types";
+
+export type RoleType = 'admin' | 'user' | undefined;
 
 export interface IRegisterUserInput {
   email: string;
   password: string;
-  role?: string;
+  role?: RoleType;
 }
 
 @injectable()
 export class RegisterUserUseCase {
-  constructor(private readonly userRepo: IUserRepository) { }
+  constructor(@inject(TYPES.IUserRepository) private readonly userRepo: IUserRepository) { }
 
   async execute(input: IRegisterUserInput): Promise<User> {
     const existing = await this.userRepo.findByEmail(input.email);

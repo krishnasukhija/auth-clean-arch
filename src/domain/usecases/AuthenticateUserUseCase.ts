@@ -1,10 +1,12 @@
 // src/domain/usecases/AuthenticateUserUseCase.ts
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
 import { IUserRepository } from "../repositories/IUserRepository";
 import { User } from "../../entities/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { TYPES } from "../../infrastructure/types";
+
 
 dotenv.config();
 
@@ -15,7 +17,8 @@ export interface IAuthenticateUserInput {
 
 @injectable()
 export class AuthenticateUserUseCase {
-  constructor(private readonly userRepo: IUserRepository) {}
+
+  constructor(@inject(TYPES.IUserRepository) private readonly userRepo: IUserRepository) { }
 
   async execute(input: IAuthenticateUserInput): Promise<string> {
     const user = await this.userRepo.findByEmail(input.email);
