@@ -3,7 +3,7 @@
 // In clean architecture, the domain entity is plain and framework-agnostic.
 // Here we define a User entity with minimal fields.
 export class User {
-  public id: string;
+  public id?: string;
   public email: string;
   public passwordHash: string;
   public role?: string; // e.g., 'admin', 'user'

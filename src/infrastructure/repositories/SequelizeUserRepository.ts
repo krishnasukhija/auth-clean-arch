@@ -1,6 +1,6 @@
 // src/infrastructure/repositories/SequelizeUserRepository.ts
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
-import { User } from "../../entities/User";
+import { User } from "../../domain/entities/User";
 import sequelize from "../database";
 import { DataTypes, Model, Optional } from "sequelize";
 import bcrypt from "bcrypt";
@@ -16,19 +16,19 @@ interface UserAttributes {
 interface UserCreationAttributes extends Optional<UserAttributes, "id" | "role"> { }
 
 class UserModel extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: string;
-  public email!: string;
-  public passwordHash!: string;
-  public role!: string;
+  declare id: string;
+  declare email: string;
+  declare passwordHash: string;
+  declare role: string;
 
   // timestamps are optional
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare createdAt: Date;
+  declare updatedAt: Date;
 }
 
 UserModel.init(
   {
-    id: { type: DataTypes.UUID, primaryKey: true },
+    id: { type: DataTypes.UUID, primaryKey: true, defaultValue: DataTypes.UUIDV4 },
     email: { type: DataTypes.STRING, allowNull: false, unique: true },
     passwordHash: { type: DataTypes.STRING, allowNull: false },
     role: { type: DataTypes.STRING, allowNull: false, defaultValue: "user" },
@@ -39,6 +39,7 @@ UserModel.init(
     timestamps: true,
   }
 );
+
 
 export class SequelizeUserRepository implements IUserRepository {
   async create(user: { email: string; passwordHash: string; role?: string }): Promise<User> {
@@ -56,7 +57,7 @@ export class SequelizeUserRepository implements IUserRepository {
     return new User(found.id, found.email, found.passwordHash, found.role);
   }
 
-  async findById(id: number): Promise<User | null> {
+  async findById(id: string): Promise<User | null> {
     const found = await UserModel.findByPk(id);
     if (!found) return null;
     return new User(found.id, found.email, found.passwordHash, found.role);

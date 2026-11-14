@@ -1,14 +1,14 @@
 // src/domain/usecases/AuthenticateUserUseCase.ts
 import { injectable, inject } from "inversify";
-import { IUserRepository } from "../repositories/IUserRepository";
+import { IUserRepository } from "../../repositories/IUserRepository";
 import { User } from "../../entities/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { TYPES } from "../../infrastructure/types";
+import { TYPES } from "../../../infrastructure/types";
 
 
-dotenv.config();
+// dotenv.config();
 
 export interface IAuthenticateUserInput {
   email: string;
@@ -28,7 +28,7 @@ export class AuthenticateUserUseCase {
     const valid = await bcrypt.compare(input.password, user.passwordHash);
     if (!valid) {
       throw new Error("Invalid credentials");
-    }
+    };
     const token = jwt.sign({ sub: user.id, role: user.role }, process.env.JWT_SECRET!, {
       expiresIn: "1h",
     });

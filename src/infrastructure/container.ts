@@ -4,8 +4,8 @@ import { Container } from "inversify";
 import { TYPES } from "./types";
 import { IUserRepository } from "../domain/repositories/IUserRepository";
 import { SequelizeUserRepository } from "../infrastructure/repositories/SequelizeUserRepository";
-import { RegisterUserUseCase } from "../domain/usecases/RegisterUserUseCase";
-import { AuthenticateUserUseCase } from "../domain/usecases/AuthenticateUserUseCase";
+import { RegisterUserUseCase } from "../domain/application/usecases/RegisterUserUseCase";
+import { AuthenticateUserUseCase } from "../domain/application/usecases/AuthenticateUserUseCase";
 import { AuthController } from "../controllers/AuthController";
 
 const container = new Container();

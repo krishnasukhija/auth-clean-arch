@@ -1,9 +1,9 @@
 // src/domain/usecases/RegisterUserUseCase.ts
 import { injectable, inject } from "inversify";
-import { IUserRepository } from "../repositories/IUserRepository";
+import { IUserRepository } from "../../repositories/IUserRepository";
 import { User } from "../../entities/User";
 import bcrypt from "bcrypt";
-import { TYPES } from "../../infrastructure/types";
+import { TYPES } from "../../../infrastructure/types";
 
 export type RoleType = 'admin' | 'user' | undefined;
 

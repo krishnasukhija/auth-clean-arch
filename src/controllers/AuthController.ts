@@ -1,9 +1,11 @@
 // src/controllers/AuthController.ts
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { inject, injectable } from "inversify";
-import { RegisterUserUseCase } from "../domain/usecases/RegisterUserUseCase";
-import { AuthenticateUserUseCase } from "../domain/usecases/AuthenticateUserUseCase";
+import { RegisterUserUseCase } from "../domain/application/usecases/RegisterUserUseCase";
+import { AuthenticateUserUseCase } from "../domain/application/usecases/AuthenticateUserUseCase";
 import { TYPES } from "../infrastructure/types";
+import type { UserInterface } from "../infrastructure/utils/general.types";
+
 
 @injectable()
 export class AuthController {
@@ -12,20 +14,24 @@ export class AuthController {
     @inject(TYPES.AuthenticateUserUseCase) private authenticateUserUseCase: AuthenticateUserUseCase
   ) { }
 
-  async register(req: Request, res: Response) {
+  register = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
-      const { email, password } = req.body;
-      const role = null;
-      const user = await this.registerUserUseCase.execute({ email, password });
-      res.status(201).json({ id: user.id, email: user.email, role: user.role });
+      // const { userInterface: UserInterface } = req.body;
+      // const { email, password } = userInterface;
+      const { user } = req.body;
+      const { email, password } = user;
+      const role = 'user';
+      const userInstance = await this.registerUserUseCase.execute({ email, password });
+      res.status(201).json({ id: userInstance.id, email: userInstance.email, role });
     } catch (err: any) {
       res.status(400).json({ error: err.message });
     }
   }
 
-  async login(req: Request, res: Response) {
+  login = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { email, password } = req.body;
+      const { user } = req.body;
+      const { email, password } = user;
       const token = await this.authenticateUserUseCase.execute({ email, password });
       res.json({ token });
     } catch (err: any) {
