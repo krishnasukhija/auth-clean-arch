@@ -1,9 +1,9 @@
 // src/app.ts
 import "reflect-metadata";
 import express, { Request, Response, NextFunction, urlencoded, response } from "express";
-import { container } from "./infrastructure/container";
+import { container } from "./infrastructure/inversify/container";
 import { AuthController } from "./controllers/AuthController";
-import { TYPES } from "./infrastructure/types";
+import { TYPES } from "./infrastructure/inversify/types";
 import userVaidationMiddleware from './infrastructure/middleware/userValidationMiddleware';
 import { asyncErrorHandler } from "./infrastructure/utils/catchAsync";
 import { RequestHandler } from "express";
@@ -19,6 +19,7 @@ app.use(helmet());
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
 app.use('/api/user', userRouter);
+
 // app.use(LoginLimiter);
 
 // Resolve controller from DI container

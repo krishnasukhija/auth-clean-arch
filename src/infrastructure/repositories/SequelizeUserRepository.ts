@@ -1,16 +1,17 @@
 // src/infrastructure/repositories/SequelizeUserRepository.ts
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
 import { User } from "../../domain/entities/User";
-import sequelize from "../database";
+import sequelize from "../config/database";
 import { DataTypes, Model, Optional } from "sequelize";
-import bcrypt from "bcrypt";
+// import bcrypt from "bcrypt";
+import { RoleType } from "../../domain/entities/User";
 
 // Define Sequelize model attributes
 interface UserAttributes {
   id: string;
   email: string;
   passwordHash: string;
-  role: string;
+  role: RoleType;
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, "id" | "role"> { }
@@ -19,7 +20,7 @@ class UserModel extends Model<UserAttributes, UserCreationAttributes> implements
   declare id: string;
   declare email: string;
   declare passwordHash: string;
-  declare role: string;
+  declare role: RoleType;
 
   // timestamps are optional
   declare createdAt: Date;
@@ -42,7 +43,7 @@ UserModel.init(
 
 
 export class SequelizeUserRepository implements IUserRepository {
-  async create(user: { email: string; passwordHash: string; role?: string }): Promise<User> {
+  async create(user: { email: string; passwordHash: string; role?: RoleType }): Promise<User> {
     const created = await UserModel.create({
       email: user.email,
       passwordHash: user.passwordHash,

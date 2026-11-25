@@ -4,8 +4,8 @@ const router = express.Router({ mergeParams: true });
 
 import userValidationMiddleware from '../middleware/userValidationMiddleware';
 import { asyncErrorHandler } from '../utils/catchAsync';
-import { container } from '../container';
-import { TYPES } from '../types';
+import { container } from '../inversify/container';
+import { TYPES } from '../inversify/types';
 import { AuthController } from '../../controllers/AuthController';
 import { rateLimiter, RateLimiterRule } from '../middleware/rateLimiter';
 const authController = container.get<AuthController>(TYPES.AuthController);

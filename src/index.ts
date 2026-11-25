@@ -2,8 +2,11 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import envVarValidator from "./infrastructure/utils/envVarValidator";
 
-import sequelize from './infrastructure/database'
+envVarValidator();
+
+import sequelize from './infrastructure/config/database'
 
 import "reflect-metadata";
 import { app } from "./app";

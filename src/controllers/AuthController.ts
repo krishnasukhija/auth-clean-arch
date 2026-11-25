@@ -1,10 +1,12 @@
 // src/controllers/AuthController.ts
 import { Request, Response, NextFunction } from "express";
 import { inject, injectable } from "inversify";
-import { RegisterUserUseCase } from "../domain/application/usecases/RegisterUserUseCase";
-import { AuthenticateUserUseCase } from "../domain/application/usecases/AuthenticateUserUseCase";
-import { TYPES } from "../infrastructure/types";
+import { RegisterUserUseCase } from "../application/usecases/RegisterUserUseCase";
+import { AuthenticateUserUseCase } from "../application/usecases/AuthenticateUserUseCase";
+import { TYPES } from "../infrastructure/inversify/types";
 import type { UserInterface } from "../infrastructure/utils/general.types";
+import { IPasswordHasher, IPasswordComparer } from "../sharedServices/IPasswordHasher";
+import { ITokenService } from "../sharedServices/ITokenService";
 
 
 @injectable()
@@ -21,7 +23,7 @@ export class AuthController {
       const { user } = req.body;
       const { email, password } = user;
       const role = 'user';
-      const userInstance = await this.registerUserUseCase.execute({ email, password });
+      const userInstance = await this.registerUserUseCase.execute({ email, password }, IPasswordHasher);
       res.status(201).json({ id: userInstance.id, email: userInstance.email, role });
     } catch (err: any) {
       res.status(400).json({ error: err.message });
@@ -32,7 +34,7 @@ export class AuthController {
     try {
       const { user } = req.body;
       const { email, password } = user;
-      const token = await this.authenticateUserUseCase.execute({ email, password });
+      const token = await this.authenticateUserUseCase.execute({ email, password }, IPasswordComparer, ITokenService);
       res.json({ token });
     } catch (err: any) {
       res.status(401).json({ error: err.message });
